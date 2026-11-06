@@ -22,7 +22,7 @@ const createBook = async () => {
         });
         if (!response.ok) throw new Error( await response.text() || 'Failed to create new book.');
         router.push({
-            pather: '/books/list',
+            path: '/books/list',
             query: { message: `Book '${book.value.name}' created!` },  
         });
     } catch (e) {

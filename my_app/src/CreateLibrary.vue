@@ -22,7 +22,7 @@ const createLibrary = async () => {
         });
         if (!response.ok) throw new Error( await response.text() || 'Failed to create new library.');
         router.push({
-            pather: '/libraries/list',
+            path: '/libraries/list',
             query: { message: `Library '${library.value.name}' created!` },  
         });
     } catch (e) {

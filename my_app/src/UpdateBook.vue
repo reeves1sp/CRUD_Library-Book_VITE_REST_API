@@ -42,7 +42,7 @@
                 body: JSON.stringify(book.value),
             });
             if (!res.ok) throw new Error('Failed to update book.');
-                router.push({ path: '/books/list', query: { message: 'Book updated. ' } });
+            router.push({ path: '/books/list', query: { message: 'Book updated. ' } });
 
         } catch (e) { error.value = 'Error saving: ' + e.message; }
     };

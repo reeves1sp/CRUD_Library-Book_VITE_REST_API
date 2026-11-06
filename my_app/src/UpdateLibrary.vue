@@ -35,7 +35,7 @@ const updateLibrary = async () => {
             body: JSON.stringify(library.value),
         });
         if (!res.ok) throw new Error('Failed to update library');
-            router.push({ path: '/libraries/list', query: { message: 'Library updated!' } });
+        router.push({ path: '/libraries/list', query: { message: 'Library updated!' } });
     } catch (e) { error.value = 'Error saving: '+ e.message; }
 };
 
