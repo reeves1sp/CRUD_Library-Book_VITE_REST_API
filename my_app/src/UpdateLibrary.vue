@@ -53,7 +53,7 @@ const removeBook = async (bookId) => {
 
 const addBook = async () => {
     if (!selectedBookId.value) return;
-    const res = await fetch(`${API_BASE_URL}/${library.value.libraryId}/books/${selectedBookId.value}`, { method: 'POST' });
+    const res = await fetch(`${API_BASE_URL}/${library.value.libraryId}/books/${selectedBookId.value}`, { method: 'PUT' });
     if (!res.ok) alert('Failed to add book.');
     else { selectedBookId.value = ''; await fetchLibraryDetails(); }
 };

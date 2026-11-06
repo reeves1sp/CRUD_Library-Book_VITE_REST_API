@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-
 const route = useRoute(); // Access the current route
 // Read flash message/error from query parameters on load
 const books = ref([]);
@@ -28,6 +27,28 @@ const deleteBook = async (bookId, bookName) => {
         } catch (e) { error.value = 'Error deleting book: '+ e.message; }
     }
 };
+
+const returnBook = async (bookId) => {
+    try {
+            const book = books.value.find((a) => a.bookId === Number(bookId));
+        if (book) {
+            book.status = 'Available'
+            return true;
+        }
+        return false;
+    } catch (e) { error.value = 'Error returning book: ' + e.message }
+};
+
+const rentBook = async (bookId) => {
+    try {
+        const book = books.value.find((a) => a.bookId === Number(bookId));
+        if (book) {
+            book.status = 'Rented'
+            return true;
+        }
+        return false;
+    } catch (e) { error.value = 'Error renting book: '+ e.message}
+}
 
 onMounted(fetchBooks);
 </script>
@@ -58,8 +79,8 @@ onMounted(fetchBooks);
                     <td>{{ book.genre }}</td>
                     <td>{{ book.status }}</td>
                     <td>
-                        <button v-if="book.status === 'Rented'" @click="returnBookById(book.bookId, book.name)">Return</button>
-                        <button v-if="book.status === 'Available'" @click="rentBookById(book.bookId, book.name)">Rent</button>
+                        <button v-if="book.status === 'Rented'" @click="returnBook(book.bookId)">Return</button>
+                        <button v-if="book.status === 'Available'" @click="rentBook(book.bookId, book.name)">Rent</button>
                     </td>
                     <td>
                         <button @click="deleteBook(book.bookId, book.name)">Delete</button>

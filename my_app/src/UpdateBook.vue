@@ -56,17 +56,12 @@
 
     const addLibrary = async () => {
         if (!selectedLibraryId.value) return;
-        const res = await fetch(`${API_BASE_URL}/${book.value.bookId}/libraries/${selectedLibraryId.value}`,
-            { method: 'POST' }
-        );
+        const res = await fetch(`${API_BASE_URL}/${book.value.bookId}/libraries/${selectedLibraryId.value}`, { method: 'PUT' });
         if (!res.ok) alert('Failed to add library to book.');
         else { selectedLibraryId.value = ''; await fetchBookDetails(); }
     };
 
-    onMounted(() => {   // Displays Book information as soon as the page is rendered
-        fetchBookDetails();
-        fetchAllLibraries();
-    });
+    onMounted(() => { fetchBookDetails(); fetchAllLibraries(); });
 </script>
 <template>
     <div class="book-update">
