@@ -3,9 +3,9 @@ import { ref } from 'vue';
 // Library Management
     // Starter Libraries
 export const libraries = ref([
-{ libraryId: 1, name: 'Vestaburg Library', location: 'Vestaburg, MI', email: 'vslibrary@vcs-k12.net' },
-{ libraryId: 2, name: 'Alma Public Library', location: 'Alma, MI', email: 'aslibrary@outlook.com' },
-{ libraryId: 3, name: 'Alma College Bookstore', location: 'Alma, MI', email: 'acbookstore@alma.edu' },
+{ libraryId: 1, name: 'Vestaburg Library', location: 'Vestaburg, MI', email: 'vslibrary@vcs-k12.net', books: [] },
+{ libraryId: 2, name: 'Alma Public Library', location: 'Alma, MI', email: 'aslibrary@outlook.com', books: [] },
+{ libraryId: 3, name: 'Alma College Bookstore', location: 'Alma, MI', email: 'acbookstore@alma.edu', books: [] },
 ]);
 
 let nextId = 4;

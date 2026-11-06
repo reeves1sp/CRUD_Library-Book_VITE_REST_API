@@ -5,9 +5,9 @@
 import { ref } from 'vue';
     // Starter Books
 export const books= ref([
-    { bookId: 1, name: 'The Lightning Thief', author: 'Rick Riordan', genre: 'Fantasy Fiction', status: 'Rented' },
-    { bookId: 2, name: 'Into The Wild', author: 'Erin Hunter', genre: 'Fantasy Fiction', status: 'Available' },
-    { bookId: 3, name: 'The Dragonet Prophecy', author: 'Tui T. Sutherland', genre: 'Fantasy Fiction', status: 'Rented' },
+    { bookId: 1, name: 'The Lightning Thief', author: 'Rick Riordan', genre: 'Fantasy Fiction', status: 'Rented', libraries: [] },
+    { bookId: 2, name: 'Into The Wild', author: 'Erin Hunter', genre: 'Fantasy Fiction', status: 'Available', libraries: [] },
+    { bookId: 3, name: 'The Dragonet Prophecy', author: 'Tui T. Sutherland', genre: 'Fantasy Fiction', status: 'Rented', libraries: [] },
 ]);
 
 let nextId = 4;
