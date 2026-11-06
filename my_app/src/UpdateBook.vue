@@ -35,6 +35,8 @@
         allLibraries.value = await res.json();
     };
 
+
+
     const updateBook = async () => { // Pushes the user to the Update page
         try {
             const res = await fetch(`${API_BASE_URL}/${book.value.bookId}`, {
@@ -107,8 +109,8 @@
                 {{  library.name  }} ({{  library.location  }})
                 <button @click.prevent="removeLibrary(library.libraryId)">Remove</button>
             </li>
-            <li v-if="!book.libraries || book.libraries.length === 0">No Libraries Assigned</li>
         </ul>
+        <li v-if="!book.libraries || book.libraries.length === 0">No Libraries Assigned</li>
         <h3>Add a Library</h3>
         <select v-model="selectedLibraryId">
             <option disabled value="">Please select one</option>
