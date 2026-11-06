@@ -3,7 +3,7 @@
 // Could not get the router links to work, so I used a different method that does not require this file.
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-const API_BASE_URL = 'https://papers-knol.onrender.com/books';
+const API_BASE_URL = 'https://crud-library-book-vite-rest-api.onrender.com';
 
 export default {
     setup() {

@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getLibrary, updateLibraryById } from './libraryscripts.js'
+
 
 const route = useRoute();
 const router = useRouter();
-const BOOKS_API_URL = ''
-const API_BASE_URL = ''
+const API_BASE_URL = 'https://rest-library.onrender.com/libraries';
+const BOOKS_API_URL = 'https://rest-library.onrender.com/books';
+
 
 const library = ref({   // Object traits for each Library
     libraryId: null,
@@ -16,55 +17,49 @@ const library = ref({   // Object traits for each Library
     books: []
 });
 const error = ref('');
-const allBooks = ref([])
-const selectedBookId = ref('')
+const allBooks = ref([]);
+const selectedBookId = ref('');
 
-const fetchLibraryDetails = () => { // Grabs the details of a Library object through getLibrary(libraryId)
-        const idFromUrl = route.params.libraryId;
-        try {
-            const data = getLibrary(idFromUrl);
-            if (!data) throw new Error('Could not find that library.');
-            library.value = { ...data };
-        } catch (e) {
-            error.value = "Error pre-loading: "+ e.message;
-        }
-    };
+const fetchLibraryDetails = async () => {
+    try {
+        const res = await fetch(`${API_BASE_URL}/${route.params.libraryId}`);
+        if (!res.ok) throw new Errow('Could not find that library');
+        library.value = await res.json();
+    } catch (e) { error.value = 'Error pre-loading: ' + e.message; }
+};
 
-    const updateLibrary = () => {   // Pushes the user to the Update page
-        try {
-            updateLibraryById(library.value);
-            router.push({
-                path: '/libraries/list',
-                query: { message: 'Library updated successfully!' }
-            });
-        } catch (e) {
-            error.value = "Error saving: "+ e.message;
-        }
-    };
+const updateLibrary = async () => {
+    try {
+        const res = await fetch(`${API_BASE_URL}/${library.value.libraryId}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(library.value),
+        });
+        if (!res.ok) throw new Error('Failed to update library');
+            router.push({ path: '/libraries/list', query: { message: 'Library updated!' } });
+    } catch (e) { error.value = 'Error saving: '+ e.message; }
+};
 
-    const fetchAllBooks = async () => {
-        const res = await fetch(BOOKS_API_URL); // CHANGE THE API URL
-        allBooks.value = await res.join();
-    };
-    const removeBook = async (bookId) => {
-        const res = await fetch(`${API_BASE_URL}/${library.value.libraryId}/bookss/${bookId}`,
+const fetchAllBooks = async () => {
+    const res = await fetch(BOOKS_API_URL);
+    allBooks.value = await res.json();
+};
+
+const removeBook = async (bookId) => {
+    const res = await fetch(`${API_BASE_URL}/${library.value.libraryId}/books/${bookId}`,
         { method: 'DELETE' });
-        if (!res.ok) alert('Failed to remove book.');
-        else await fetchLibraryDetails();
-    };
+    if (!res.ok) alert('Failed to remove book.');
+    else await fetchLibraryDetails();
+};
 
-    const addBook = async () => {
-        if (!selectedBookId.value) return;
-        const res = await fetch(`${API_BASE_URL}/${library.value.libraryId}/books/${selectedBookId.value}`,
-        { method: 'POST '}
-    );
+const addBook = async () => {
+    if (!selectedBookId.value) return;
+    const res = await fetch(`${API_BASE_URL}/${library.value.libraryId}/books/${selectedBookId.value}`, { method: 'POST' });
     if (!res.ok) alert('Failed to add book.');
-    else {selectedBookId.value = ''; await fetchLibraryDetails(); }
-    };
+    else { selectedBookId.value = ''; await fetchLibraryDetails(); }
+};
 
-        onMounted(() => {   // Grabs library details and the book list upon rendering the page
-        fetchLibraryDetails(); fetchAllBooks();
-    });
+onMounted(() => { fetchLibraryDetails(); fetchAllBooks(); });
+
 </script>
 <template>
     <div class="library-update">
@@ -104,7 +99,7 @@ const fetchLibraryDetails = () => { // Grabs the details of a Library object thr
         </ul>
         <p v-if="!library.books || library.books.length === 0">No Books Assigned</p>
         <h3>Add a Book</h3>
-        <select v-model="selectBookId">
+        <select v-model="selectedBookId">
             <option disabled value="">Please select one</option>
             <option v-for="b in allBooks" :key="b.bookId" :value="b.bookId">
                 {{ b.name }}
@@ -112,5 +107,6 @@ const fetchLibraryDetails = () => { // Grabs the details of a Library object thr
         </select>
         <button @click.prevent="addBook" :disabled="!selectedBookId">Add Book</button>
     </div>
+    <p><router-link to="/libraries/list">Back to Libraries</router-link></p>
     </div>
 </template>

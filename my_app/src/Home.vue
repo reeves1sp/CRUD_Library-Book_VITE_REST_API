@@ -1,4 +1,4 @@
-<script></script>
+<script setup></script>
 <template>
    <p>Manage the authors and papers in your collection.</p>
  <div class="home-links">

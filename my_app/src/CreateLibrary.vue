@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 import { libraries, addLibrary } from './libraryscripts.js'
 
 const router = useRouter();
-const API_BASE_URL = 'https://papers-knol.onrender.com/libraries'
+const API_BASE_URL = 'https://crud-library-book-vite-rest-api.onrender.com'
 
 
 export default {

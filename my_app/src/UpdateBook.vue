@@ -1,12 +1,11 @@
 <script setup>
     import { ref, onMounted } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
-    import { getBook, updateBookById } from './bookscript.js';
 
     const route = useRoute();
     const router = useRouter();
-    const API_BASE_URL = ''
-    const LIBRARIES_API_URL = ''
+    const API_BASE_URL = 'https://rest-library.onrender.com/books'
+    const LIBRARIES_API_URL = 'https://rest-library.onrender.com/libraries'
 
     const book = ref({  // Object traits for Book
         bookId: null,
@@ -22,7 +21,6 @@
     const selectedLibraryId = ref('');
 
     const fetchBookDetails = async () => {    // Grabs the information of a Book with getBook(bookId)
-        const idFromUrl = route.params.bookId;
         try {
             const res = await fetch(`${API_BASE_URL}/${route.params.bookId}`);
             if (!res.ok) throw new Error('Could not find that book.');
@@ -33,11 +31,8 @@
     };
 
     const fetchAllLibraries = async () => {
-        try {
-            const res = await fetch(`${API_BASE_URL}/${route.params.bookId}`);
-            if (!res.ok) throw new Error('Could not find that book.');
-            book.value = await res.json();
-        } catch (e) {error.value = 'Error pre-loading book: ' + e.message; }
+        const res = await fetch(LIBRARIES_API_URL);
+        allLibraries.value = await res.json();
     };
 
     const updateBook = async () => { // Pushes the user to the Update page

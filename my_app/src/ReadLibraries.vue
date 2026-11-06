@@ -1,30 +1,45 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { libraries, addLibrary, deleteLibraryById } from './libraryscripts.js';
+import { useRoute } from 'vue-router';
 // --- State Definitions using ref ---
+const libraries = ref([]);
 const route = useRoute(); // Access the current route
-const router = useRouter();
 // Read flash message/error from query parameters on load
 const message = ref(route.query.message || '');
 const error = ref(route.query.error || '');
-// --- Functions ---
-const deleteLibrary = (libraryId, libraryName) => { // Deletes the Library with the deleteLibrary(libraryId) function
-    if (confirm(`Are you sure you want to delete library '${libraryName}'?`)) {
+const API_BASE_URL = 'https://rest-library.onrender.com/libraries'
+
+const fetchLibraries = async () => {
+    try {
+        const response = await fetch(API_BASE_URL);
+        if (!response.ok) throw new Error('Failed to fetch libraries.');
+        libraries.value = await response.json();
+    } catch (e) {
+        error.value = 'Error loading libraries: ' + e.message;
+    }
+};
+
+const deleteLibrary = async (libraryId, libraryName) => {
+    if (confirm(`Are you sure you want to delete '${libraryName}'?`)) {
         try {
-        deleteLibraryById(libraryId);
-        message.value = `Library '${libraryName}' deleted successfully!`;
-        error.value = '';
+            const response = await fetch(`${API_BASE_URL}/${libraryId}`, { method: 'DELETE'});
+            if (!response.ok) throw new Error(`Deletion failed: ${response.status}`);
+            await fetchLibraries();
+            message.value = `Library '${libraryName}' deleted!`;
         } catch (e) {
-        error.value = 'Error deleting Library: ' + e.message;
-        message.value = '';
+            error.value = 'Error deleting library: ' + e.message;
         }
     }
 };
 
+onMounted(fetchLibraries);
 </script>
 <template>
-    <div>
+    <div class="library-list">
+        <h1>Library Management</h1>
+        <div v-if="message" class="alert success"><p>{{  message  }}</p></div>
+        <div v-if="error" class="alert error"><p>{{ error }}</p></div>
+        <h2>Current Libraries ({{ libraries.length }})</h2>
         <table border="1">
             <thead>
                 <tr>

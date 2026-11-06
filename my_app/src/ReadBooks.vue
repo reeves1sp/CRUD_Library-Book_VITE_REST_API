@@ -1,27 +1,42 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { books, addBook, returnBookById, rentBookById, deleteBookById } from './bookscript.js';
+
 const route = useRoute(); // Access the current route
 // Read flash message/error from query parameters on load
+const books = ref([]);
 const message = ref(route.query.message || '');
 const error = ref(route.query.error || '');
+const API_BASE_URL = 'https://rest-library.onrender.com/books'
 // Functions
-const deleteBook = (bookId, bookName) => {  // Deletes book with deleteBookById, optional messages
-if (confirm(`Are you sure you want to delete book '${bookName}'?`)) {
+
+const fetchBooks = async () => {
     try {
-        deleteBookById(bookId);
-        message.value = `Book '${bookName}' deleted successfully!`; // Only visible in certain formats
-        error.value = '';
-    } catch (e) {   // Logs the error as an error message, sends to the user/console
-        error.value = 'Error deleting book: ' + e.message;
-        message.value = '';
+        const response = await fetch(API_BASE_URL);
+        if (!response.ok) throw new Error('Failed to fetch books.');
+        books.value = await response.json();
+    } catch (e) { error.value = 'Error loading books: ' + e.message; }
+};
+
+const deleteBook = async (bookId, bookName) => {
+    if (confirm(`Are you sure you want to delete '${bookName}'?`)) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/${book.Id}`, {method: 'DELETE' });
+            if (!response.ok) throw new Error(`Deletion failed: ${response.status}`);    
+            await fetchBooks();
+            message.value = `Book '${bookName}' deleted!`;
+        } catch (e) { error.value = 'Error deleting book: '+ e.message; }
     }
-    }
-}
+};
+
+onMounted(fetchBooks);
 </script>
 <template>
-    <div>
+    <div class="book-list">
+        <h1>Book Management</h1>
+        <div v-if="message" class="alert success"><p>{{  message  }}</p></div>
+        <div v-if="error" class="alert error"><p>{{  error  }}</p></div>
+        <h2>Current Books ({{  books.length  }})</h2>
         <table border="1">
             <thead>
                 <tr>
