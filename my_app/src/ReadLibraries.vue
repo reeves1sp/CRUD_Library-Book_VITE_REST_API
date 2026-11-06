@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+
 // --- State Definitions using ref ---
 const libraries = ref([]);
 const route = useRoute(); // Access the current route
@@ -71,6 +72,8 @@ onMounted(fetchLibraries);
                 </tr>
             </tbody>
         </table>
-        <button @click="addLibrary('Unnamed')">Create New Library</button>
+    </div>
+    <div class="library-create">
+        <p><router-link to="/libraries/create">+ Add New Library</router-link></p>
     </div>
 </template>

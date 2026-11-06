@@ -20,7 +20,7 @@ const fetchBooks = async () => {
 const deleteBook = async (bookId, bookName) => {
     if (confirm(`Are you sure you want to delete '${bookName}'?`)) {
         try {
-            const response = await fetch(`${API_BASE_URL}/${book.Id}`, {method: 'DELETE' });
+            const response = await fetch(`${API_BASE_URL}/${bookId}`, {method: 'DELETE' });
             if (!response.ok) throw new Error(`Deletion failed: ${response.status}`);    
             await fetchBooks();
             message.value = `Book '${bookName}' deleted!`;
@@ -93,6 +93,8 @@ onMounted(fetchBooks);
                 </tr>
             </tbody>
         </table>
-        <button @click="addBook('Unnamed')">Create New Library</button>
+    </div>
+        <div class="book-create">
+        <p><router-link to="/books/create">+ Add New Book</router-link></p>
     </div>
 </template>

@@ -25,9 +25,7 @@
             const res = await fetch(`${API_BASE_URL}/${route.params.bookId}`);
             if (!res.ok) throw new Error('Could not find that book.');
             book.value = await res.json();
-        } catch (e) {
-            error.value = "Error pre-loading: "+ e.message;
-        }
+        } catch (e) { error.value = "Error pre-loading: "+ e.message; }
     };
 
     const fetchAllLibraries = async () => {
@@ -44,13 +42,13 @@
                 body: JSON.stringify(book.value),
             });
             if (!res.ok) throw new Error('Failed to update book.');
-                router.push({ path: 'books/list', query: { message: 'Book updated. ' } });
+                router.push({ path: '/books/list', query: { message: 'Book updated. ' } });
 
         } catch (e) { error.value = 'Error saving: ' + e.message; }
     };
 
     const removeLibrary = async (libraryId) => {
-        const res = await fetch(`${API_BASE_URL}/${book.value.bookId}/libraries/${library.Id}`,
+        const res = await fetch(`${API_BASE_URL}/${book.value.bookId}/libraries/${libraryId}`,
             { method: 'DELETE' });
             if (!res.ok) alert('Failed to remove library from book.');
             else await fetchBookDetails();

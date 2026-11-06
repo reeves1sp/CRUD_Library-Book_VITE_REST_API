@@ -12,7 +12,7 @@ let nextId = 4;
 export function getLibrary(libraryId) {     // Finds a library's value/data based off of the ID
     return libraries.value.find((a) => a.libraryId === Number(libraryId));
 }
-export function addLibrary(library) {       // Adds a library with empty info, increases the value of the nextID
+export function addNewLibrary(library) {       // Adds a library with empty info, increases the value of the nextID
     let currentId = libraries.value.length
     const nextId = currentId + 1
     libraries.value.push({ ...library, libraryId: nextId });
